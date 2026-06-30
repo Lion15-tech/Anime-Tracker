@@ -12,8 +12,16 @@ def main(page: ft.Page):
         campo_nombre = ft.TextField(
             label = "Nombre del anime"
         )
-        lista_animes = ft.Column()
 
+        lista_animes = ft.Column()
+        for anime in animes:
+            lista_animes.controls.append(
+                ft.ElevatedButton(
+                    anime,
+                    on_click=lambda e, nombre=anime: mostrar_anime(nombre)
+                )  
+            )
+            
 
         def agregar_anime(e):
             #Se guarda con mayusculas para luego mostrar este nombre
@@ -46,11 +54,13 @@ def main(page: ft.Page):
                 }
                 mensaje.value = f"{nombre} agregado con exito!"
 
+                # CORRECCIÓN 2: Se limpia la lista antes del bucle para evitar que los animes anteriores se dupliquen visualmente
+                lista_animes.controls.clear()
                 for anime in animes:
                     lista_animes.controls.append(
                         ft.ElevatedButton(
                             anime,
-                            on_click=lambda e: mostrar_anime(anime)
+                            on_click=lambda e, nombre=anime: mostrar_anime(nombre)
                             )
                         )
                 
@@ -71,7 +81,7 @@ def main(page: ft.Page):
             lista_animes
             )
 
-        
+
     def mostrar_anime(nombre):
         page.controls.clear()
 
@@ -82,7 +92,7 @@ def main(page: ft.Page):
 
         volver = ft.ElevatedButton(
             "Volver",
-            on_click = lambda e: mostrar_inicio
+            on_click = lambda e: mostrar_inicio()
         )
 
         page.add(
